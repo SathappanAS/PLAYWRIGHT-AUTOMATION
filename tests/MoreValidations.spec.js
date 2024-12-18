@@ -2,8 +2,13 @@ const {test,expect} = require ('@playwright/test')
 
 test("Popup validations", async({page})=>{
     await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
-  
-    await page.locator('#mousehover').hover();
+
+    const framepage= await page.frameLocator('#courses-iframe');  // frame 
+    await framepage.locator("li a[href*='lifetime-access']:visible").click(); //finding only visible elements
+    const textcheck = await framepage.locator('.text h2').textContent();
+    console.log(textcheck.split(" ")[1]); // print text by split space
+})
+    //await page.locator('#mousehover').hover();
 
 
 
@@ -17,5 +22,3 @@ test("Popup validations", async({page})=>{
 
     //page.on('dialog',dialog=>dialog.accept()); //listener
     //await page.locator("#confirmbtn").click();
-
-})
