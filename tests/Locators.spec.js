@@ -2,7 +2,7 @@
 
 import {test,expect} from '@playwright/test'  //test,expect are function 
 
-test('Loctors',async({page})=>{   //Loctors = test case name and page is fixture
+test('Loctors',async({page})=>{   //Loctors = test case name and page is fixture //test annotation 
 
     await page.goto("https://www.demoblaze.com/index.html"); //Before using any functions from the page fixture we have to use something called await keyword
 
