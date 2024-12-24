@@ -4,13 +4,19 @@ const { promises } = require('fs');
 
 const loginPayload = {userEmail: "sathappan.a.s@gmail.com", userPassword: "Chennai2024*"} 
 
+
+let token;
+
+
+
 test.beforeAll( async()=>
 {
   const apiContext =  await request.newContext();
-  const loginResponse= await apiContext.post('https://rahulshettyacademy.com/api/ecom/auth/login',{data:loginPayload})//200//201/202
-  expect((await loginResponse).ok()).toBeTruthy();
-  const loginResponseJson = loginResponse.json();
-  const token = loginResponse.token();
+  const loginResponse= await apiContext.post('https://www.rahulshettyacademy.com/client',{data:loginPayload})//200//201/202
+  expect(loginResponse.ok()).toBeTruthy();
+  const loginResponseJson = await loginResponse.json();
+  const token = loginResponseJson.token;
+  console.log(token);
 });
 
 
@@ -20,36 +26,31 @@ test.beforeAll( async()=>
 
 
 
-test.beforeEach(  ()=>{
+// test.beforeEach(  ()=>{
 
 
-});
+// });
 
 
 //before all the test cases - test 1, test 2, test 3 (execute once)
 
-test('Client test cases ', async ({browser})=>
+test('Client test cases ', async ({page})=>
     {
-        const context=await browser.newContext(); 
-        const page=await context.newPage();
-        
-        await page.goto('https://rahulshettyacademy.com/client', { waitUntil: 'load' });
       
-        const emailID = "sathappan.a.s@gmail.com";
-        const products=page.locator(".card-body");
-        const eMail = page.locator("#userEmail");
-        const Password = page.locator("#userPassword");
-        const Login = page.locator("#login");
-        await eMail.fill(emailID);
-        await Password.fill("Chennai2024*");
-        await Login.click();
-        //await page.waitForLoadState('networkidle');
+    
+        page.addInitScript(value =>{
+
+            window.localStorage.setItem('token',value);
+        } , token);
+       // await page.goto('https://rahulshettyacademy.com/api/ecom/auth/login');
+        const email="";
+        const ProductName = 'ZARA COAT 3';
+        await page.goto('https://rahulshettyacademy.com/client' ,  { waitUntil: 'load' });
+        
+        
         await page.locator(".card-body").first().waitFor();
         const titles = page.locator(".card-body").allTextContents();
         console.log(titles);
-    
-    
-        const ProductName = 'ZARA COAT 3';
         const count = await products.count();
     
         for(let i=0;i<count;++i){
